@@ -1,12 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-
-function usePrevious(value) {
-  const ref = useRef();
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
-}
+import usePrevious from '../hooks/usePrevious';
 
 function Todo(props) {
   const [isEditing, setEditing] = useState(false);
@@ -82,6 +75,10 @@ function Todo(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
+    if (!newName.trim()) {
+      alert("Please fill in task name!");
+      return;
+    }
     props.editTask(props.id, newName);
     setNewName("");
     setEditing(false);

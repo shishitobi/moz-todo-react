@@ -4,10 +4,9 @@ function Form(props) {
     const [name, setName] = useState("");
 
     function handleSubmit(e) {
-        const isEmpty = str => !str.trim().length;
         e.preventDefault();
-        if (isEmpty(name)) {
-            alert("Please fill task name!");
+        if (!name.trim()) {
+            alert("Please fill in task name!");
             return;
         }
         props.addTask(name);

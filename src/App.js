@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import Todo from './components/Todo';
 import Form from './components/Form';
 import FilterButton from './components/FilterButton';
+import usePrevious from './hooks/usePrevious';
 import { nanoid } from 'nanoid';
 
 const FILTER_MAP = {
@@ -11,17 +12,10 @@ const FILTER_MAP = {
 };
 const FILTER_NAMES = Object.keys(FILTER_MAP);
 
-function usePrevious(value) {
-  const ref = useRef();
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
-}
-
 function App(props) {
   const [tasks, setTasks] = useState(props.tasks);
   const [filter, setFilter] = useState('All');
+
   const taskList = tasks.filter(FILTER_MAP[filter]).map(task =>  (
                                         <Todo 
                                           id={task.id} 
@@ -33,6 +27,7 @@ function App(props) {
                                           editTask={editTask}
                                         />
                                       ));
+
   const filterList = FILTER_NAMES.map(name => (
                                                 <FilterButton 
                                                   key={name} 
@@ -41,8 +36,10 @@ function App(props) {
                                                   setFilter={setFilter}
                                                 />
                                               ));
+
   const tasksNoun = taskList.length !== 1 ? 'tasks' : 'task';
-  const headingText = taskList.length !== 0 ? `${taskList.length} ${tasksNoun} remaining.` : "Huray! There is no task to complete.";
+  const headingText = `${taskList.length} ${tasksNoun} remaining.`;
+
   function toggleTaskCompleted(id) {
     const updatedTasks = tasks.map(task => {
       if (id === task.id) {
